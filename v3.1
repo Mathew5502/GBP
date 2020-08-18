@@ -1,0 +1,312 @@
+import requests
+from exchangeratesapi import Api
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(282, 240)
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+
+        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.comboBox.setGeometry(QtCore.QRect(80, 100, 71, 31))
+        self.comboBox.setObjectName("comboBox")
+        font = QtGui.QFont()
+        font.setFamily("Consolas")
+        font.setPointSize(12)
+        font.setWeight(75)
+        font.setBold(False)
+        self.comboBox.setFont(font)
+        self.comboBox.addItems(["CHF", "EUR", "GBP", "JPY", "SEK", "USD"])
+        
+        
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(20, 20, 131, 31))
+        font = QtGui.QFont()
+        font.setFamily("Consolas")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label.setFont(font)
+        self.label.setObjectName("label")
+
+        api = Api()
+        USDGBP_XRATE = api.get_rate('USD', 'GBP')
+        response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+        data = response.json()
+        currency = data["data"]
+        BTC_USD_PRICE = data["data"]["amount"]
+        
+        
+
+        # change BTC_USD_PRICE to a float in order to present it on screen
+        # as having 2 d.p to represent the pennies
+        BTC_USD_PRICE = float(BTC_USD_PRICE)
+        BTC_USD_PRICE = "{:.2f}".format(BTC_USD_PRICE)
+        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit.setGeometry(QtCore.QRect(160, 20, 113, 31))
+        self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit.setText("$" + BTC_USD_PRICE)
+        self.lineEdit.setReadOnly(True)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setFamily("Consolas")
+        self.lineEdit.setFont(font)
+        
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(160, 145, 111, 41))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setPointSize(11)
+        font.setWeight(75)
+        font.setFamily("Consolas")
+        self.pushButton.setFont(font)
+        self.pushButton.setObjectName("pushButton")
+        
+        self.lineEdit_3 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_3.setGeometry(QtCore.QRect(160, 100, 111, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setFamily("Consolas")
+        font.setWeight(75)
+        self.lineEdit_3.setFont(font)
+        self.lineEdit_3.setObjectName("lineEdit_3")
+        
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(20, 100, 51, 31))
+        font = QtGui.QFont()
+        font.setFamily("Consolas")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_3.setFont(font)
+        self.label_3.setObjectName("label_3")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(20, 60, 91, 31))
+        font = QtGui.QFont()
+        font.setFamily("Consolas")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_2.setFont(font)
+        self.label_2.setObjectName("label_2")
+        
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setFamily("Consolas")
+        self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
+        self.lineEdit_2.setGeometry(QtCore.QRect(160, 60, 111, 31))
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.lineEdit_2.setFont(font)
+        self.lineEdit_2.setFocus()
+        
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 282, 21))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setObjectName("menubar")
+        self.menuFile = QtWidgets.QMenu(self.menubar)
+        self.menuFile.setObjectName("menuFile")
+        MainWindow.setMenuBar(self.menubar)
+        self.actionNew_Ctrl_N = QtWidgets.QAction(MainWindow)
+        self.actionNew_Ctrl_N.setObjectName("actionNew_Ctrl_N")
+        self.menuFile.addAction(self.actionNew_Ctrl_N)
+        self.menubar.addAction(self.menuFile.menuAction())
+
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setFamily("Consolas")
+        self.lineEdit_2.setFont(font)
+        self.lineEdit_2.setPlaceholderText("Enter amount")
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setFamily("Consolas")
+        self.lineEdit_3.setFont(font)
+        self.lineEdit_3.setText("0")
+        self.lineEdit_3.setReadOnly(True)
+        
+        self.actionNew_Ctrl_N.triggered.connect(self.clickMethod_2)
+        self.pushButton.clicked.connect(self.clickMethod)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def clickMethod(self):
+        if len(self.lineEdit_2.text()) > 0:
+            if self.comboBox.currentText() == "GBP":
+                api = Api()
+                USDGBP_XRATE = api.get_rate('USD', 'GBP')
+                response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+                data = response.json()
+                currency = data["data"]
+                BTC_USD_PRICE = data["data"]["amount"]
+                
+                BTC_OWNED = self.lineEdit_2.text()
+                BTC_OWNED = float(BTC_OWNED)
+                BTC_USD_PRICE = float(BTC_USD_PRICE)
+                USD_VAL = BTC_OWNED * BTC_USD_PRICE     
+                GBP_VAL = USDGBP_XRATE * USD_VAL
+                GBP_VAL = "{:.2f}".format(GBP_VAL)
+                font = QtGui.QFont()
+                font.setFamily("Consolas")
+                font.setPointSize(12)
+                self.lineEdit_3.setFont(font)
+                self.lineEdit_3.setText("£" + GBP_VAL)
+
+            elif self.comboBox.currentText() == "CHF":
+                api = Api()
+                USDCHF_XRATE = api.get_rate('USD', 'CHF')
+                response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+                data = response.json()
+                currency = data["data"]
+                BTC_USD_PRICE = data["data"]["amount"]
+                
+                BTC_OWNED = self.lineEdit_2.text()
+                BTC_OWNED = float(BTC_OWNED)
+                BTC_USD_PRICE = float(BTC_USD_PRICE)
+                USD_VAL = BTC_OWNED * BTC_USD_PRICE     
+                CHF_VAL = USDCHF_XRATE * USD_VAL
+                CHF_VAL = "{:.2f}".format(CHF_VAL)
+                font = QtGui.QFont()
+                font.setFamily("Consolas")
+                font.setPointSize(12)
+                self.lineEdit_3.setFont(font)
+                self.lineEdit_3.setText(CHF_VAL)
+
+            elif self.comboBox.currentText() == "EUR":
+                api = Api()
+                USDEUR_XRATE = api.get_rate('USD', 'EUR')
+                response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+                data = response.json()
+                currency = data["data"]
+                BTC_USD_PRICE = data["data"]["amount"]
+                
+                BTC_OWNED = self.lineEdit_2.text()
+                BTC_OWNED = float(BTC_OWNED)
+                BTC_USD_PRICE = float(BTC_USD_PRICE)
+                USD_VAL = BTC_OWNED * BTC_USD_PRICE     
+                EUR_VAL = USDEUR_XRATE * USD_VAL
+                EUR_VAL = "{:.2f}".format(EUR_VAL)
+                font = QtGui.QFont()
+                font.setFamily("Consolas")
+                font.setPointSize(12)
+                self.lineEdit_3.setFont(font)
+                self.lineEdit_3.setText(EUR_VAL)
+
+            elif self.comboBox.currentText() == "JPY":
+                api = Api()
+                USDJPY_XRATE = api.get_rate('USD', 'JPY')
+                response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+                data = response.json()
+                currency = data["data"]
+                BTC_USD_PRICE = data["data"]["amount"]
+                
+                BTC_OWNED = self.lineEdit_2.text()
+                BTC_OWNED = float(BTC_OWNED)
+                BTC_USD_PRICE = float(BTC_USD_PRICE)
+                USD_VAL = BTC_OWNED * BTC_USD_PRICE     
+                JPY_VAL = USDJPY_XRATE * USD_VAL
+                JPY_VAL = "{:.2f}".format(JPY_VAL)
+                font = QtGui.QFont()
+                font.setFamily("Consolas")
+                font.setPointSize(12)
+                self.lineEdit_3.setFont(font)
+                self.lineEdit_3.setText(JPY_VAL)
+
+            elif self.comboBox.currentText() == "SEK":
+                api = Api()
+                USDSEK_XRATE = api.get_rate('USD', 'SEK')
+                response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+                data = response.json()
+                currency = data["data"]
+                BTC_USD_PRICE = data["data"]["amount"]
+                
+                BTC_OWNED = self.lineEdit_2.text()
+                BTC_OWNED = float(BTC_OWNED)
+                BTC_USD_PRICE = float(BTC_USD_PRICE)
+                USD_VAL = BTC_OWNED * BTC_USD_PRICE     
+                SEK_VAL = USDSEK_XRATE * USD_VAL
+                SEK_VAL = "{:.2f}".format(SEK_VAL)
+                font = QtGui.QFont()
+                font.setFamily("Consolas")
+                font.setPointSize(12)
+                self.lineEdit_3.setFont(font)
+                self.lineEdit_3.setText(SEK_VAL)
+            
+
+            else:
+                font = QtGui.QFont()
+                font.setPointSize(12)
+                font.setFamily("Consolas")
+                self.lineEdit_2.setFont(font)
+                self.lineEdit_2.setFocus()
+                self.lineEdit_2.setText("0")
+                font = QtGui.QFont()
+                font.setPointSize(12)
+                font.setFamily("Consolas")
+                self.lineEdit_3.setFont(font)
+                self.lineEdit_3.setText("0")
+                
+        else:
+            font = QtGui.QFont()
+            font.setPointSize(12)
+            font.setFamily("Consolas")
+            self.lineEdit_3.setFont(font)
+            self.lineEdit_3.setText("0")
+
+    def clickMethod_2(self):
+        api = Api()
+        response = requests.get('https://api.coinbase.com/v2/prices/BTC-USD/spot')
+        data = response.json()
+        currency = data["data"]
+        BTC_USD_PRICE = data["data"]["amount"]
+        BTC_USD_PRICE = float(BTC_USD_PRICE)
+        BTC_USD_PRICE = "{:.2f}".format(BTC_USD_PRICE)
+        self.lineEdit.setText("$" + BTC_USD_PRICE)
+        self.lineEdit_2.clear()
+        self.lineEdit_3.clear()
+
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setFamily("Consolas")
+        self.lineEdit_2.setFont(font)
+        self.lineEdit_2.setPlaceholderText("Enter amount")
+        self.lineEdit_2.setFocus()
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setFamily("Consolas")
+        self.lineEdit_3.setFont(font)
+        self.lineEdit_3.setText("0")
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "CryptoValue v3.1"))
+        self.label.setText(_translate("MainWindow", "BTC $USD Price"))
+        self.pushButton.setText(_translate("MainWindow", "CALCULATE"))
+        self.label_3.setText(_translate("MainWindow", "Value"))
+        self.label_2.setText(_translate("MainWindow", "BTC Amount"))
+        self.menuFile.setTitle(_translate("MainWindow", "File"))
+        self.actionNew_Ctrl_N.setText(_translate("MainWindow", "New (Ctrl + N)"))
+        self.actionNew_Ctrl_N.setShortcut(_translate("MainWindow", "New (Ctrl + N)"))
+        
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
+
